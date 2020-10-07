@@ -1,34 +1,46 @@
 {
-  "name": "front_end",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "front_end",
+	"version": "0.1.0",
+	"private": true,
+	"homepage": "http://goodfellas.test/assets",
+	"dependencies": {
+		"@tailwindcss/ui": "^0.6.2",
+		"@testing-library/jest-dom": "^4.2.4",
+		"@testing-library/react": "^9.5.0",
+		"@testing-library/user-event": "^7.2.1",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"react-scripts": "3.4.3"
+	},
+	"scripts": {
+		"start": "npm run watch:css && react-scripts start",
+		"build": "npm run build:css && react-scripts build && npm run deployToBackEnd",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
+		"watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
+		"deployToBackEnd": "mv build assets && mv './assets' '../../../public' && npm run copyIndexToView",
+		"copyIndexToView": "mv '../../../public/assets/index.html' '../../../app/Views/index.php'"
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"autoprefixer": "9.8.6",
+		"postcss": "^8.1.1",
+		"postcss-cli": "8.0.0",
+		"tailwindcss": "^1.8.10"
+	}
 }
