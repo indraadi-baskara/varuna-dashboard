@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function Dropdown(props) {
-	const [ishDropdownOpen, setIsDropdownOpen] = useState(false);
-	const [label, setLabel] = useState(props.name);
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	let [label, setLabel] = useState(props.value);
 
 	const handleClick = (value, index) => {
 		if (props.name === "Bulan") {
@@ -14,7 +14,6 @@ function Dropdown(props) {
 		}
 
 		setLabel(value);
-		// console.log(value, index);
 		setIsDropdownOpen(false);
 	};
 
@@ -23,13 +22,14 @@ function Dropdown(props) {
 			<div>
 				<span className="rounded-md shadow">
 					<button
-						onClick={() => setIsDropdownOpen(!ishDropdownOpen)}
+						onClick={() => setIsDropdownOpen(!isDropdownOpen)}
 						type="button"
 						className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
 						id="options-menu"
 						aria-haspopup="true"
 						aria-expanded="true"
 					>
+						{/* {props.value} */}
 						{label}
 						{/* <!-- Heroicon name: chevron-down --> */}
 						<svg
@@ -60,7 +60,7 @@ function Dropdown(props) {
   --> */}
 			<div
 				className={`${
-					ishDropdownOpen ? "block" : "hidden"
+					isDropdownOpen ? "block" : "hidden"
 				} origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg`}
 			>
 				<div className="rounded-md bg-white shadow-xs">

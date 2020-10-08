@@ -5,7 +5,7 @@ function FilterBar(props) {
 	const [optionLists, setOptionLists] = useState({ bulan: [], tahun: [] });
 
 	const getOptionLists = () => {
-		fetch(`http://localhost/goodfellas/public/api/config`)
+		fetch(`http://goodfellas.test/api/config`)
 			.then((response) => response.json())
 			.then((jsonResponse) => {
 				setOptionLists(jsonResponse);
@@ -18,17 +18,20 @@ function FilterBar(props) {
 
 	return (
 		<div className="w-full flex justify-between items-center mb-2">
-			<p>Reports</p>
+			<p>
+				Laporan pada bulan {optionLists.bulan[props.value.inputBulan--]},{" "}
+				{props.value.inputTahun}
+			</p>
 			<div className="inline-flex">
 				<Dropdown
 					name="Bulan"
-					value={props.inputBulan}
+					value={optionLists.bulan[props.value.inputBulan]}
 					options={optionLists.bulan}
 					setDropdownValue={props.handleInput.setInputBulan}
 				/>
 				<Dropdown
 					name="Tahun"
-					value={props.inputTahun}
+					value={props.value.inputTahun}
 					options={optionLists.tahun}
 					setDropdownValue={props.handleInput.setInputTahun}
 				/>

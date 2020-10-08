@@ -4,24 +4,33 @@ import FilterBar from "./FilterBar";
 
 function ReportsModule() {
 	const [reports, setReports] = useState({
+		success: true,
 		tahun: null,
 		bulan: null,
 		result: [],
 	});
 
-	const [inputBulan, setInputBulan] = useState(1);
-	const [inputTahun, setInputTahun] = useState(2017);
+	const [inputBulan, setInputBulan] = useState(8);
+	const [inputTahun, setInputTahun] = useState(2020);
 
 	const formatCurrency = (number) => {
 		return "Rp. " + parseInt(number).toLocaleString("id-ID");
 	};
 
 	const getReports = (bulan, tahun) => {
-		fetch(`http://localhost/goodfellas/public/api/reports/${tahun}/${bulan}`)
+		fetch(`http://goodfellas.test/api/reports/${tahun}/${bulan}`)
 			.then((response) => response.json())
 			.then((jsonResponse) => {
 				setReports(jsonResponse);
+				console.log(callculateTotal(jsonResponse));
 			});
+	};
+
+	const callculateTotal = (aaa) => {
+		let total = aaa.result.reduce((prev, current) => {
+			return prev + parseInt(current.FOOD);
+		}, 0);
+		return total;
 	};
 
 	useEffect(() => {
@@ -57,83 +66,105 @@ function ReportsModule() {
 							}}
 						/>
 
-						<div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-							<div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-								<div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-									<table className="min-w-full divide-y divide-gray-200 text-right">
-										<thead className="text-center">
-											<tr>
-												<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-													TANGGAL
-												</th>
-												<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-													FOOD
-												</th>
-												<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-													BEV
-												</th>
-												<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-													CIGARRET
-												</th>
-												<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-													TAX
-												</th>
-												<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-													SERVICE
-												</th>
-												<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-													JUMLAH
-												</th>
-												<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-													TOTAL
-												</th>
-												<th className="px-6 py-3 bg-gray-50"></th>
-											</tr>
-										</thead>
-										<tbody className="bg-white divide-y divide-gray-200">
-											{reports.result.map((report) => {
-												return (
-													<tr key={report.tgl_jual}>
-														<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-800 font-medium">
-															{report.tgl_jual}
-														</td>
-														<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-															{formatCurrency(report.FOOD)}
-														</td>
-														<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-															{formatCurrency(report.BEV)}
-														</td>
-														<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-															{formatCurrency(report.CIGARRET)}
-														</td>
-														<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-															{formatCurrency(report.JUMLAH)}
-														</td>
-														<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-															{formatCurrency(report.TAX)}
-														</td>
-														<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-															{formatCurrency(report.SERVICE)}
-														</td>
-														<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-															{formatCurrency(report.TOTAL)}
-														</td>
-														<td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-															<a
-																href="#"
-																className="text-indigo-600 hover:text-indigo-900"
-															>
-																Edit
-															</a>
-														</td>
-													</tr>
-												);
-											})}
-										</tbody>
-									</table>
+						{reports.success ? (
+							<div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+								<div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+									<div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+										<table className="min-w-full divide-y divide-gray-200 text-right">
+											<thead className="text-center">
+												<tr>
+													<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+														TANGGAL
+													</th>
+													<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+														BEV
+													</th>
+													<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+														BEV1
+													</th>
+													<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+														CIGARETTE
+													</th>
+													<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+														FOOD
+													</th>
+													<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+														MINIBAR
+													</th>
+													<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+														TAX
+													</th>
+													<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+														SERVICE
+													</th>
+													<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+														JUMLAH
+													</th>
+													<th className="px-6 py-3 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+														TOTAL
+													</th>
+													<th className="px-6 py-3 bg-gray-50"></th>
+												</tr>
+											</thead>
+											<tbody className="bg-white divide-y divide-gray-200">
+												{reports.result.map((report) => {
+													return (
+														<tr key={report.tgl_jual}>
+															<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-800 font-medium">
+																{report.tgl_jual}
+															</td>
+															<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+																{formatCurrency(report.BEV)}
+															</td>
+															<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+																{formatCurrency(report.BEV1)}
+															</td>
+															<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+																{formatCurrency(report.CIGARETTE)}
+															</td>
+															<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+																{formatCurrency(report.FOOD)}
+															</td>
+															<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+																{formatCurrency(report.MINIBAR)}
+															</td>
+															<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+																{formatCurrency(report.JUMLAH)}
+															</td>
+															<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+																{formatCurrency(report.TAX)}
+															</td>
+															<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+																{formatCurrency(report.SERVICE)}
+															</td>
+															<td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+																{formatCurrency(report.TOTAL)}
+															</td>
+															<td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
+																<a
+																	href="#"
+																	className="text-indigo-600 hover:text-indigo-900"
+																>
+																	Edit
+																</a>
+															</td>
+														</tr>
+													);
+												})}
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
-						</div>
+						) : (
+							<div
+								className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4"
+								role="alert"
+							>
+								<p className="font-bold">Oooppsss.....</p>
+								<p>{reports.result}</p>
+							</div>
+						)}
 					</div>
 				</div>
 			</main>
