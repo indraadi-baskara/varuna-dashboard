@@ -1,38 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Dropdown from "./Dropdown";
 
 function FilterBar(props) {
-	const [optionLists, setOptionLists] = useState({ bulan: [], tahun: [] });
+	const bulan = [
+		"Januari",
+		"Februari",
+		"Maret",
+		"April",
+		"Mei",
+		"Juni",
+		"Juli",
+		"Agustus",
+		"September",
+		"Oktober",
+		"November",
+		"Desember",
+	];
 
-	const getOptionLists = () => {
-		fetch(`http://goodfellas.test/api/config`)
-			.then((response) => response.json())
-			.then((jsonResponse) => {
-				setOptionLists(jsonResponse);
-			});
-	};
+	const tahun = [2017, 2018, 2019, 2020];
 
-	useEffect(() => {
-		getOptionLists();
-	}, []);
+	const currentMonth = props.value.inputBulan;
 
 	return (
 		<div className="w-full flex justify-between items-center mb-2">
 			<p>
-				Laporan pada bulan {optionLists.bulan[props.value.inputBulan--]},{" "}
-				{props.value.inputTahun}
+				Laporan pada bulan {bulan[currentMonth]}, {props.value.inputTahun}
 			</p>
 			<div className="inline-flex">
 				<Dropdown
 					name="Bulan"
-					value={optionLists.bulan[props.value.inputBulan]}
-					options={optionLists.bulan}
+					value={bulan[currentMonth]}
+					options={bulan}
 					setDropdownValue={props.handleInput.setInputBulan}
 				/>
 				<Dropdown
 					name="Tahun"
 					value={props.value.inputTahun}
-					options={optionLists.tahun}
+					options={tahun}
 					setDropdownValue={props.handleInput.setInputTahun}
 				/>
 			</div>

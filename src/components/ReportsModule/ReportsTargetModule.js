@@ -12,8 +12,8 @@ class ReportsModule extends Component {
 
 		this.state = {
 			reports: { success: true, tahun: null, bulan: null, result: [] },
-			inputBulan: 8,
-			inputTahun: 2020,
+			inputBulan: new Date().getMonth() + 1,
+			inputTahun: new Date().getFullYear(),
 		};
 
 		this.handleInputBulan = this.handleInputBulan.bind(this);
@@ -47,7 +47,7 @@ class ReportsModule extends Component {
 	async getReports(bulan, tahun, outlet) {
 		let hostname = getHostname();
 		let { data } = await axios.get(
-			`http://${hostname}/api/reports/${outlet}/${tahun}/${bulan}`
+			`http://${hostname}/api/target/${outlet}/${tahun}/${bulan}`
 		);
 		this.setState({ reports: data });
 	}

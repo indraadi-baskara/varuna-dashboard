@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 function Dropdown(props) {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -18,7 +18,7 @@ function Dropdown(props) {
 	};
 
 	return (
-		<div className="relative text-left">
+		<div className="relative text-left ml-1">
 			<div>
 				<span className="rounded-md shadow">
 					<button
@@ -30,7 +30,7 @@ function Dropdown(props) {
 						aria-expanded="true"
 					>
 						{/* {props.value} */}
-						{label}
+						{label || "Pilih"}
 						{/* <!-- Heroicon name: chevron-down --> */}
 						<svg
 							className="-mr-1 ml-2 h-5 w-5"
