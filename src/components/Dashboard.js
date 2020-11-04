@@ -1,52 +1,46 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
+import { getHostname } from "../config/api";
 import Tags from "./Tags";
 
 export default class Dashboard extends Component {
-	capitalizeStr(string) {
-		return string.charA;
+	constructor(props) {
+		super(props);
+		this.state = { outlets: {} };
+	}
+
+	componentDidMount() {
+		this.getOutlets();
+	}
+
+	async getOutlets() {
+		let hostname = getHostname();
+		let { data } = await axios.get(`http://${hostname}/api/config`);
+		this.setState({ outlets: data });
 	}
 
 	render() {
-		const outlets = {
-			localhost: {
-				name: "localhost",
-				status: "offline",
-				img:
-					"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1357&q=80",
-			},
-			goodfellas: {
-				name: "goodfellas",
-				status: "offline",
-				img:
-					"https://uploads-ssl.webflow.com/5c752f67ef5f3c117ee5fdca/5cd5258bf95bc71a6079db67_GF---1.jpg",
-			},
-		};
-
-		const renderCards = Object.values(outlets).map((outlet) => {
+		const renderCards = Object.values(this.state.outlets).map((outlet) => {
 			return (
-				<Link key={outlet.name} to={`/target/${outlet.name}`}>
-					<div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden my-2 mx-4">
+				<Link key={outlet.name} to={`/target/${outlet.hostname}`}>
+					<div className="max-w-xs bg-white shadow-lg rounded-lg overflow-hidden my-2 mx-4">
 						<img
-							className="w-full h-56 object-cover object-center"
+							className="w-full h-36 object-cover object-center"
 							src={outlet.img}
 							alt="avatar"
 						/>
-						<div className="flex items-center px-6 py-3 bg-gray-900">
+						<div className="flex justify-between items-center px-6 py-3 bg-gray-900">
 							<h1 className="mr-3 text-white font-semibold text-lg capitalize">
 								{outlet.name}
 							</h1>
-							<Tags name={outlet.name} status={outlet.status} />
+							<Tags
+								name={outlet.name}
+								hostname={outlet.hostname}
+								status={outlet.status}
+							/>
 						</div>
-						{/* <div className="py-4 px-6">
-							<h1 className="text-2xl font-semibold text-gray-800 uppercase">
-								{outlet.name}
-							</h1>
-							<p className="py-2 text-lg text-gray-700">
-								Full Stack maker & UI / UX Designer , love hip hop music Author
-								of Building UI.
-							</p>
-						</div> */}
 					</div>
 				</Link>
 			);
@@ -62,7 +56,7 @@ export default class Dashboard extends Component {
 					</div>
 				</header>
 				<main>
-					<div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 flex justify-center flex-wrap">
+					<div className="max-w-7xl mx-auto py-3 sm:px-6 lg:px-8 flex justify-center flex-wrap">
 						{renderCards}
 					</div>
 				</main>

@@ -6,32 +6,59 @@ export default class Tag extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: props.name,
+			hostname: props.hostname,
 			status: props.status,
 		};
 	}
 
 	componentDidMount() {
-		this.getServerConnectionStatus(this.state.name);
-		this.timerID = setInterval(
-			() => this.getServerConnectionStatus(this.state.name),
-			1000 * 5
-		);
+		this._isMounted = true;
+		this.axiosCancelSource = axios.CancelToken.source();
+
+		this.getServerConnectionStatus(this.state.hostname);
+
+		this.timerID = setInterval(() => {
+			this.getServerConnectionStatus(this.state.hostname);
+		}, 1000 * 10);
 	}
 
 	componentWillUnmount() {
+		this._isMounted = false;
+		this.axiosCancelSource.cancel("Request cancelled...");
+
 		clearInterval(this.timerID);
 	}
 
-	async getServerConnectionStatus(serverName = "localhost") {
-		const hostname = getHostname();
-		const {
-			data: { name, status },
-		} = await axios.get(`http://${hostname}/api/connection/${serverName}`);
-		this.setState({
-			name,
-			status,
-		});
+	async getServerConnectionStatus(serverName) {
+		try {
+			const url = getHostname();
+			const {
+				data: { hostname, status },
+			} = await axios.get(`http://${url}/api/connection/${serverName}`, {
+				timeout: 1000 * 5,
+				cancelToken: this.axiosCancelSource.token,
+			});
+
+			if (
+				this.props.handleOnlineStatus !== undefined &&
+				this.state.status == "offline"
+			) {
+				this.props.handleOnlineStatus();
+			}
+
+			if (this._isMounted) {
+				this.setState({
+					hostname,
+					status,
+				});
+			}
+		} catch (error) {
+			if (this._isMounted) {
+				this.setState({
+					status: "offline",
+				});
+			}
+		}
 	}
 
 	render() {
@@ -46,26 +73,11 @@ export default class Tag extends Component {
 
 		return (
 			<div
-				className={`ml-1 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-${
+				className={`ml-3 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-${
 					tagStyle[this.state.status].color
 				}-200 text-${tagStyle[this.state.status].color}-700 rounded-full`}
 			>
-				{/* <svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="16"
-					height="16"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					strokeWidth="2"
-					strokeLinecap="round"
-					strokeLinejoin="round"
-					className="feather feather-arrow-right mr-2"
-				>
-					<line x1="5" y1="12" x2="19" y2="12"></line>
-					<polyline points="12 5 19 12 12 19"></polyline>
-				</svg> */}
-				{this.state.name} - {this.state.status}
+				{this.state.status}
 			</div>
 		);
 	}
