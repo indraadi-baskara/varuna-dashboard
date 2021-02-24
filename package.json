@@ -2,7 +2,7 @@
 	"name": "front_end",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "./assets",
+	"homepage": "/",
 	"dependencies": {
 		"@tailwindcss/ui": "^0.6.2",
 		"@testing-library/jest-dom": "^4.2.4",
@@ -18,12 +18,12 @@
 	},
 	"scripts": {
 		"start": "npm run watch:css && react-scripts start",
-		"build": "npm run build:css && react-scripts build && npm run deployToBackEnd",
+		"build": "npm run build:css && set INLINE_RUNTIME_CHUNK=false && react-scripts build && npm run deployToBackEnd",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
 		"build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
 		"watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
-		"deployToBackEnd": "mv build assets && mv './assets' '../../../public' && npm run copyIndexToView",
+		"deployToBackEnd": "mv build assets && mv './assets' '../backend/public/assets",
 		"copyIndexToView": "mv '../../../public/assets/index.html' '../../../app/Views/index.php'"
 	},
 	"eslintConfig": {
@@ -43,6 +43,7 @@
 	},
 	"devDependencies": {
 		"autoprefixer": "9.8.6",
+		"cross-env": "^7.0.2",
 		"postcss": "^8.1.1",
 		"postcss-cli": "8.0.0",
 		"tailwindcss": "^1.8.10"

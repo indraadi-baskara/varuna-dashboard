@@ -17,7 +17,7 @@ function FilterBar(props) {
 		"Desember",
 	];
 
-	const tahun = [2017, 2018, 2019, 2020];
+	const tahun = [2017, 2018, 2019, 2020, 2021];
 
 	const currentMonth = props.value.inputBulan;
 

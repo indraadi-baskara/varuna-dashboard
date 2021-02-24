@@ -20,7 +20,7 @@ function App() {
 									<Link to="/">
 										<img
 											className="h-8 w-8"
-											src="https://tailwindui.com/img/logos/workflow-mark-on-dark.svg"
+											src="https://tailwindui.com/img/logos/v1/workflow-mark-on-dark.svg"
 											alt="Workflow logo"
 										/>
 									</Link>

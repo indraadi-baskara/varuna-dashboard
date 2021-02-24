@@ -28,7 +28,10 @@ export default class DataTable extends Component {
 	renderTableRowData() {
 		return this.props.data.map((item) => {
 			return (
-				<tr key={item.tgl_jual} className="hover:bg-gray-100 cursor-pointer">
+				<tr
+					key={item.tgl_jual + item.TOTAL}
+					className="hover:bg-gray-100 cursor-pointer"
+				>
 					{this.props.tableFields.map((field) => {
 						return (
 							<td

@@ -17,7 +17,7 @@ export default class Dashboard extends Component {
 
 	async getOutlets() {
 		let hostname = getHostname();
-		let { data } = await axios.get(`http://${hostname}/api/config`);
+		let { data } = await axios.get(`http://${hostname}/api/outlets`);
 		this.setState({ outlets: data });
 	}
 
@@ -25,9 +25,9 @@ export default class Dashboard extends Component {
 		const renderCards = Object.values(this.state.outlets).map((outlet) => {
 			return (
 				<Link key={outlet.name} to={`/target/${outlet.hostname}`}>
-					<div className="max-w-xs bg-white shadow-lg rounded-lg overflow-hidden my-2 mx-4">
+					<div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden my-2 mx-4">
 						<img
-							className="w-full h-36 object-cover object-center"
+							className="w-full h-48 object-cover object-center"
 							src={outlet.img}
 							alt="avatar"
 						/>

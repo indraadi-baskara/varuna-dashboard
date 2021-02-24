@@ -40,12 +40,14 @@ class ReportsModule extends Component {
 
 	handleOnlineStatus() {
 		const outlet = this.props.match.params.location;
-		this.getReports(this.state.inputBulan, this.state.inputTahun, outlet);
+		!this._isFetching &&
+			this.getReports(this.state.inputBulan, this.state.inputTahun, outlet);
 	}
 
 	componentDidMount() {
 		this._isMounted = true;
-		this.axiosCancelSource = axios.CancelToken.source();
+		this._isFetching = true;
+		this._axiosCancelSource = axios.CancelToken.source();
 
 		const outlet = this.props.match.params.location;
 		this.getReports(this.state.inputBulan, this.state.inputTahun, outlet);
@@ -53,7 +55,7 @@ class ReportsModule extends Component {
 
 	componentWillUnmount() {
 		this._isMounted = false;
-		this.axiosCancelSource.cancel("Request cancelled...");
+		this._axiosCancelSource.cancel("Request cancelled...");
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -74,25 +76,34 @@ class ReportsModule extends Component {
 			let {
 				data,
 			} = await axios.get(
-				`http://${hostname}/api/target/${outlet}/${tahun}/${bulan}`,
-				{ cancelToken: this.axiosCancelSource.token }
+				`http://${hostname}/api/sales/target/${outlet}/${tahun}/${bulan}`,
+				{ cancelToken: this._axiosCancelSource.token }
 			);
-			this._isMounted && this.setState({ reports: data, isLoading: false });
+			if (this._isMounted) {
+				this.setState({ reports: data, isLoading: false });
+				this._isFetching = false;
+			}
 		} catch (error) {
-			this._isMounted && this.setState({ isLoading: false });
+			if (this._isMounted) {
+				this.setState({ isLoading: false });
+				this._isFetching = false;
+			}
 		}
 	}
 
 	callculateTotal() {
-		let total = this.state.reports.result.reduce((accumulator, item) => {
-			Object.keys(item).forEach((key) => {
-				if (key !== "tgl_jual") {
-					accumulator[key] = (accumulator[key] || 0) + item[key];
-				}
-			});
-			return accumulator;
-		}, {});
+		let total = [];
 
+		if (this.state.reports.result) {
+			total = this.state.reports.result.reduce((accumulator, item) => {
+				Object.keys(item).forEach((key) => {
+					if (key !== "tgl_jual") {
+						accumulator[key] = (accumulator[key] || 0) + item[key];
+					}
+				});
+				return accumulator;
+			}, {});
+		}
 		return total;
 	}
 

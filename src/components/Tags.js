@@ -34,14 +34,14 @@ export default class Tag extends Component {
 			const url = getHostname();
 			const {
 				data: { hostname, status },
-			} = await axios.get(`http://${url}/api/connection/${serverName}`, {
+			} = await axios.get(`http://${url}/api/outlets/is_online/${serverName}`, {
 				timeout: 1000 * 5,
 				cancelToken: this.axiosCancelSource.token,
 			});
 
 			if (
 				this.props.handleOnlineStatus !== undefined &&
-				this.state.status == "offline"
+				this.state.status === "offline"
 			) {
 				this.props.handleOnlineStatus();
 			}
